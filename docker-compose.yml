@@ -2,16 +2,23 @@ version: "3.9"
 
 services:
   transfer-sh:
-      command: '--provider local --port 8080'
-      image: 'dutchcoders/transfer.sh:latest-noroot'
-      container_name: 'transfer-sh'
-      restart: unless-stopped
-      environment:
-        - BASEDIR=/data
-      volumes:
-        - transfer-sh:/data
-      networks:
-        - traefik
+    command: '--provider local --port 8080'
+    image: 'dutchcoders/transfer.sh:latest-noroot'
+    container_name: 'transfer-sh'
+    restart: unless-stopped
+    environment:
+      - BASEDIR=/data
+    volumes:
+      - transfer-sh:/data
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.transfer-sh.rule=Host(`transfer.${BASE_DOMAIN:-ozeliurs.com}`)"
+      - "traefik.http.routers.transfer-sh.entrypoints=websecure"
+      - "traefik.http.routers.transfer-sh.tls=true"
+      - "traefik.http.routers.transfer-sh.tls.certresolver=cloudflare"
+      - "traefik.http.services.transfer-sh.loadbalancer.server.port=8080"
 
 networks:
   traefik:
