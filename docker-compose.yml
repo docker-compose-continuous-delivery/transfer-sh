@@ -8,6 +8,10 @@ services:
     restart: unless-stopped
     environment:
       - BASEDIR=/data
+      - PURGE_DAYS=366
+      - PURGE_INTERVAL=24 # hours
+      - MAX_UPLOAD_SIZE=50000000 # kb -> 50gb
+      - RANDOM_TOKEN_LENGTH=12
     volumes:
       - transfer-sh:/data
     networks:
